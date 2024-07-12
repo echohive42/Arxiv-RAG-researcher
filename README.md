@@ -3,7 +3,7 @@
 This tool allows you to search ArXiv for scientific papers, extract their content, embed and chunk the text, and ask questions about them using GPT-4o.
 
 #### You can find 250+ projects like this at my Patreon, where I also offer consulting: https://www.patreon.com/echohive42.
-#### You can find all my videos about building LLM powered apps at my website https://www.echohive.live.
+#### You can find all my videos about building LLM powered apps at my website https://www.echohive.live. Or at my YouTube channel https://www.youtube.com/@echohive.
 
 ## Setup
 
