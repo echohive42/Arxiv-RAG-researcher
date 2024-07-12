@@ -15,6 +15,8 @@ from termcolor import colored
 # Initialize Chroma client
 client = chromadb.PersistentClient(path="./chroma_db")
 
+arxiv_client = arxiv.Client()
+
 openai_ef = embedding_functions.OpenAIEmbeddingFunction(
     api_key=os.getenv("OPENAI_API_KEY"),
     model_name="text-embedding-3-large"
@@ -54,10 +56,13 @@ async def search_arxiv(user_input, search_mode, n):
         collection_name = f"arxiv_search_{user_input.replace(' ', '_')}"[:50]
         collection = client.get_or_create_collection(name=collection_name, embedding_function=openai_ef)
 
-        if search_mode == 'relevance':
-            results = list(arxiv.Search(query=user_input, max_results=n, sort_by=arxiv.SortCriterion.Relevance).results())
-        elif search_mode == 'latest':
-            results = list(arxiv.Search(query=user_input, max_results=n, sort_by=arxiv.SortCriterion.LastUpdatedDate).results())
+        if search_mode in ['relevance', 'latest']:
+            search = arxiv.Search(
+                query=user_input,
+                max_results=n,
+            sort_by=arxiv.SortCriterion.SubmittedDate if search_mode == 'latest' else arxiv.SortCriterion.Relevance
+            )
+            results = list(arxiv_client.results(search))
         else:
             print("Invalid search mode. Please enter 'relevance' or 'latest'.")
             return None
