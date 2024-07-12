@@ -5,7 +5,7 @@ This tool allows you to search ArXiv for scientific papers, extract their conten
 #### You can find 250+ projects like this at my Patreon, where I also offer consulting: https://www.patreon.com/echohive42.
 #### You can find all my videos about building LLM powered apps at my website https://www.echohive.live. Or at my YouTube channel https://www.youtube.com/@echohive.
 
-https://user-images.githubusercontent.com/YOUR_USER_ID/YOUR_REPO_NAME/assets/YOUR_USER_ID/arxiv-rag-researcher.mp4
+[Watch the demo video](https://youtu.be/cnqIomsS-SU)
 
 ## Setup
 
