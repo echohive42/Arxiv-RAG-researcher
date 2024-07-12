@@ -182,6 +182,32 @@ async def main():
             print(f"From: {metadata['title']}, Page: {metadata['page']}")
             print(doc[:500] + "...")  # Print first 500 characters of each chunk
             chunks.append(f"Chunk {i+1} from {metadata['title']}, Page {metadata['page']}: {doc}")
+        # Write retrieved chunks to JSON file
+        chunks_entry = {
+            "query": query,
+            "chunks": [
+                {
+                    "chunk_number": i+1,
+                    "title": metadata['title'],
+                    "page": metadata['page'],
+                    "content": doc
+                }
+                for i, (doc, metadata) in enumerate(zip(results['documents'][0], results['metadatas'][0]))
+            ]
+        }
+
+        chunks_file = "retrieved_chunks.json"
+        if os.path.exists(chunks_file):
+            with open(chunks_file, "r+") as file:
+                data = json.load(file)
+                data.append(chunks_entry)
+                file.seek(0)
+                json.dump(data, file, indent=4)
+        else:
+            with open(chunks_file, "w") as file:
+                json.dump([chunks_entry], file, indent=4)
+
+        print(f"\nRetrieved chunks have been saved to {chunks_file}")
 
         # Prepare the prompt for GPT-4
         prompt = f"Based on the following chunks of information from scientific papers, please answer this question: {query}\n\n"
@@ -190,6 +216,7 @@ async def main():
         # Send to GPT-4
         response = openai_client.chat.completions.create(
             model="gpt-4o",
+            stream=True,
             messages=[
                 {"role": "system", "content": "You are a helpful assistant that answers questions based on scientific paper excerpts."},
                 {"role": "user", "content": prompt}
@@ -198,12 +225,16 @@ async def main():
 
         # Print the response
         print("\nGPT-4 Response:")
-        print(response.choices[0].message.content)
+        assistant_response = ""
+        for chunk in response:
+            if chunk.choices[0].delta.content is not None:
+                assistant_response += chunk.choices[0].delta.content
+                print(colored(chunk.choices[0].delta.content, "green"), end="")
 
         # Append question and response to JSON file
         qa_entry = {
             "question": query,
-            "answer": response.choices[0].message.content
+            "answer": assistant_response
         }
         
         json_file = "qa_history.json"
