@@ -45,7 +45,7 @@ This tool allows you to search ArXiv for scientific papers, extract their conten
 5. The tool will:
    - Query the current Chroma DB collection to find the most relevant chunks
    - Display these chunks from the papers
-   - Provide an answer using GPT-4 based on the retrieved chunks
+   - Provide an answer using GPT-4o based on the retrieved chunks
 
 6. Questions and answers are saved in `qa_history.json` for future reference.
 
