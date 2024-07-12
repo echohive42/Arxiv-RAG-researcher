@@ -154,7 +154,7 @@ async def main():
 
     # Enter chat loop
     while True:
-        query = input(colored("Enter your question to get answers with rag and gpt-4o (or 'quit' to exit): ", "yellow"))
+        query = input(colored("\nEnter your question to get answers with rag and gpt-4o (or 'quit' to exit): ", "yellow"))
         if query.lower() == 'quit':
             break
         
